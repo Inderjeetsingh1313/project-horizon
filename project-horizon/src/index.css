@@ -1,0 +1,215 @@
+:root {
+  /* =====================================
+     Color Tokens
+  ====================================== */
+  --text: #6b6375;
+  --text-h: #08060d;
+  --bg: #ffffff;
+  --border: #e5e4e7;
+  --code-bg: #f4f3ec;
+
+  --accent: #aa3bff;
+  --accent-bg: rgba(170, 59, 255, 0.1);
+  --accent-border: rgba(170, 59, 255, 0.5);
+
+  --social-bg: rgba(244, 243, 236, 0.5);
+
+  --shadow:
+    rgba(0, 0, 0, 0.1) 0 10px 15px -3px,
+    rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+
+  /* =====================================
+     Typography Tokens
+  ====================================== */
+
+  /* Font Families */
+  --font-family-base: system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-family-heading: system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-family-mono: ui-monospace, Consolas, monospace;
+
+  /* Font Sizes */
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-md: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 24px;
+  --font-size-2xl: 36px;
+  --font-size-3xl: 56px;
+
+  /* Font Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Line Heights */
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.45;
+  --line-height-relaxed: 1.6;
+
+  /* Letter Spacing */
+  --letter-spacing-base: 0.18px;
+  --letter-spacing-heading: -0.24px;
+  --letter-spacing-display: -1.68px;
+
+  /* Global Typography */
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-normal);
+  letter-spacing: var(--letter-spacing-base);
+
+  color-scheme: light dark;
+  color: var(--text);
+  background: var(--bg);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* =====================================
+   Dark Theme
+====================================== */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #9ca3af;
+    --text-h: #f3f4f6;
+    --bg: #16171d;
+    --border: #2e303a;
+    --code-bg: #1f2028;
+
+    --accent: #c084fc;
+    --accent-bg: rgba(192, 132, 252, 0.15);
+    --accent-border: rgba(192, 132, 252, 0.5);
+
+    --social-bg: rgba(47, 48, 58, 0.5);
+
+    --shadow:
+      rgba(0, 0, 0, 0.4) 0 10px 15px -3px,
+      rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+  }
+
+  #social .button-icon {
+    filter: invert(1) brightness(2);
+  }
+}
+
+/* =====================================
+   Responsive Typography
+====================================== */
+
+@media (max-width: 1024px) {
+  :root {
+    font-size: var(--font-size-md);
+  }
+
+  h1 {
+    font-size: var(--font-size-2xl);
+    margin: 20px 0;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+}
+
+/* =====================================
+   Global Reset
+====================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-family-base);
+}
+
+/* =====================================
+   Root
+====================================== */
+
+#root {
+  width: 1126px;
+  max-width: 100%;
+  min-height: 100vh;
+
+  margin: 0 auto;
+
+  display: flex;
+  flex-direction: column;
+
+  border-inline: 1px solid var(--border);
+
+  text-align: center;
+}
+
+/* =====================================
+   Headings
+====================================== */
+
+h1,
+h2 {
+  font-family: var(--font-family-heading);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-h);
+}
+
+h1 {
+  font-size: var(--font-size-3xl);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-display);
+  margin: 32px 0;
+}
+
+h2 {
+  font-size: var(--font-size-xl);
+  line-height: 118%;
+  letter-spacing: var(--letter-spacing-heading);
+  margin: 0 0 8px;
+}
+
+/* =====================================
+   Paragraph
+====================================== */
+
+p {
+  margin: 0;
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-normal);
+}
+
+/* =====================================
+   Code
+====================================== */
+
+code,
+.counter {
+  display: inline-flex;
+  align-items: center;
+
+  font-family: var(--font-family-mono);
+
+  color: var(--text-h);
+
+  border-radius: 4px;
+}
+
+code {
+  padding: 4px 8px;
+  font-size: var(--font-size-sm);
+  line-height: 135%;
+  background: var(--code-bg);
+}
