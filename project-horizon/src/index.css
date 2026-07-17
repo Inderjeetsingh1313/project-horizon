@@ -22,12 +22,10 @@
      Typography Tokens
   ====================================== */
 
-  /* Font Families */
   --font-family-base: system-ui, "Segoe UI", Roboto, sans-serif;
   --font-family-heading: system-ui, "Segoe UI", Roboto, sans-serif;
   --font-family-mono: ui-monospace, Consolas, monospace;
 
-  /* Font Sizes */
   --font-size-xs: 12px;
   --font-size-sm: 14px;
   --font-size-md: 16px;
@@ -36,23 +34,19 @@
   --font-size-2xl: 36px;
   --font-size-3xl: 56px;
 
-  /* Font Weights */
   --font-weight-regular: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
 
-  /* Line Heights */
   --line-height-tight: 1.2;
   --line-height-normal: 1.45;
   --line-height-relaxed: 1.6;
 
-  /* Letter Spacing */
   --letter-spacing-base: 0.18px;
   --letter-spacing-heading: -0.24px;
   --letter-spacing-display: -1.68px;
 
-  /* Global Typography */
   font-family: var(--font-family-base);
   font-size: var(--font-size-lg);
   line-height: var(--line-height-normal);
@@ -125,6 +119,10 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 html,
 body {
   margin: 0;
@@ -138,13 +136,22 @@ body {
 }
 
 /* =====================================
+   Images
+====================================== */
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* =====================================
    Root
 ====================================== */
 
-#root{
-    width:100%;
-    min-height:100vh;
-    margin:0 auto;
+#root {
+  width: 100%;
+  min-height: 100vh;
 }
 
 /* =====================================

@@ -1,16 +1,30 @@
 .sidebar {
   width: 100%;
   min-height: 100vh;
-  background: #fff;
+  background: var(--bg);
   border-right: 1px solid var(--border);
   padding: 24px;
-  transition: all .3s ease;
+
+  display: flex;
+  flex-direction: column;
+
+  /* FE-02.4 Performance */
+  overflow-y: auto;
+  will-change: transform;
+  contain: layout paint;
+
+  transition: transform 0.3s ease;
 }
 
 .logo {
   font-size: 24px;
   font-weight: 600;
+  color: var(--text-h);
   margin-bottom: 40px;
+}
+   /* Navigation */
+.sidebar nav {
+  flex: 1;
 }
 
 .sidebar ul {
@@ -24,11 +38,20 @@
   margin-bottom: 8px;
   border-radius: 8px;
   cursor: pointer;
-  transition: .3s;
+  color: var(--text);
+
+  /* FE-02.4 Performance */
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    transform 0.2s ease;
+
+  will-change: background-color, transform;
 }
 
 .sidebar li:hover {
   background: var(--accent-bg);
+  transform: translateX(4px);
 }
 
 .sidebar li.active {
@@ -39,48 +62,48 @@
 
    /* Tablet */
 
-@media (max-width:768px){
+@media (max-width: 768px) {
+  .sidebar {
+    min-height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding: 16px;
+  }
 
-.sidebar{
-    min-height:auto;
-    border-right:none;
-    border-bottom:1px solid var(--border);
-    padding:16px;
-}
+  .logo {
+    text-align: center;
+    margin-bottom: 20px;
+  }
 
-.logo{
-    text-align:center;
-    margin-bottom:20px;
-}
+  .sidebar ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
 
-.sidebar ul{
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:10px;
-}
-
-.sidebar li{
-    margin:0;
-}
-
+  .sidebar li {
+    margin-bottom: 0;
+  }
 }
 
 /* Mobile */
 
-@media (max-width:320px){
+@media (max-width: 320px) {
+  .sidebar {
+    padding: 12px;
+  }
 
-.sidebar{
-    padding:12px;
-}
+  .logo {
+    font-size: 20px;
+  }
 
-.logo{
-    font-size:20px;
-}
+  .sidebar ul {
+    flex-direction: column;
+  }
 
-.sidebar li{
-    width:100%;
-    text-align:center;
-}
-
+  .sidebar li {
+    width: 100%;
+    text-align: center;
+  }
 }
