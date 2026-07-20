@@ -1,18 +1,21 @@
-import { useState } from "react";
 import "./Sidebar.css";
+
+interface SidebarProps {
+  activePage: string;
+  setActivePage: React.Dispatch<React.SetStateAction<string>>;
+}
 
 const menuItems = [
   "Dashboard",
   "Analytics",
   "Projects",
-  "Tasks",
-  "Messages",
   "Settings",
 ];
 
-export default function Sidebar() {
-  const [active, setActive] = useState("Dashboard");
-
+export default function Sidebar({
+  activePage,
+  setActivePage,
+}: SidebarProps) {
   return (
     <aside className="sidebar">
       <h2 className="logo">Project Horizon</h2>
@@ -22,8 +25,8 @@ export default function Sidebar() {
           {menuItems.map((item) => (
             <li
               key={item}
-              className={active === item ? "active" : ""}
-              onClick={() => setActive(item)}
+              className={activePage === item ? "active" : ""}
+              onClick={() => setActivePage(item)}
             >
               {item}
             </li>

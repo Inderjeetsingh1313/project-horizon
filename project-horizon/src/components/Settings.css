@@ -12,8 +12,9 @@
   box-shadow: var(--shadow);
 }
 
-.settings-card h2 {
-  margin-bottom: 10px;
+.settings-card h2{
+    font-size:28px;
+    font-weight:600;
 }
 
 .settings-card p {
