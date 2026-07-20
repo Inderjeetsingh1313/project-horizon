@@ -1,5 +1,6 @@
 import "./App.css";
 import Sidebar from "./components/Sidebar";
+import Settings from "./components/Settings";
 
 function App() {
   return (
@@ -15,19 +16,21 @@ function App() {
         <section className="cards">
           <div className="card">
             <h2>Overview</h2>
-            <p>CSS Grid Layout (260px 1fr)</p>
+            <p>Dashboard Overview</p>
           </div>
 
           <div className="card">
             <h2>Analytics</h2>
-            <p>Responsive dashboard layout.</p>
+            <p>Analytics Information</p>
           </div>
 
           <div className="card">
             <h2>Projects</h2>
-            <p>FE-02.1 completed successfully.</p>
+            <p>Projects Information</p>
           </div>
         </section>
+        
+       <Settings />
       </main>
     </div>
   );
