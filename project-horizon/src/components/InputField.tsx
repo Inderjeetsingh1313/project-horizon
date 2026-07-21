@@ -1,6 +1,6 @@
 import type { ChangeEvent } from "react";
 
-interface InputFieldProps {
+export interface InputFieldProps {
   id: string;
   label: string;
   name: string;
@@ -8,7 +8,12 @@ interface InputFieldProps {
   value: string;
   placeholder?: string;
   error?: string;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  maxLength?: number;
+  required?: boolean;
+  disabled?: boolean;
+  onChange: (
+    e: ChangeEvent<HTMLInputElement>
+  ) => void;
 }
 
 function InputField({
