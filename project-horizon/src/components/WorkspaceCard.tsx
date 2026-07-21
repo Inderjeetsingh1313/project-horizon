@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
+import { memo } from "react";
 import "./WorkspaceCard.css";
-
-interface WorkspaceCardProps {
+export interface WorkspaceCardProps {
   title: string;
   children: ReactNode;
   footer?: ReactNode;
@@ -12,6 +12,7 @@ function WorkspaceCard({
   children,
   footer,
 }: WorkspaceCardProps) {
+    console.log(title + " Rendered");
   return (
     <div className="workspace-card">
       <div className="workspace-card-header">
@@ -31,4 +32,4 @@ function WorkspaceCard({
   );
 }
 
-export default WorkspaceCard;
+export default memo(WorkspaceCard);

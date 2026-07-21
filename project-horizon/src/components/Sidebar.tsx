@@ -1,6 +1,6 @@
 import "./Sidebar.css";
-
-interface SidebarProps {
+import { memo } from "react";
+ export interface SidebarProps {
   activePage: string;
   setActivePage: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -12,7 +12,7 @@ const menuItems = [
   "Settings",
 ];
 
-export default function Sidebar({
+function Sidebar({
   activePage,
   setActivePage,
 }: SidebarProps) {
@@ -36,3 +36,4 @@ export default function Sidebar({
     </aside>
   );
 }
+export default memo(Sidebar);

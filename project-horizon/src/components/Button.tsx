@@ -1,14 +1,12 @@
 import type { ReactNode, MouseEventHandler } from "react";
 
-interface ButtonProps {
+export interface ButtonProps {
   children: ReactNode;
   type?: "button" | "submit" | "reset";
   variant?: "primary" | "secondary";
   disabled?: boolean;
-  loading?: boolean;
-  onClick?: MouseEventHandler<HTMLButtonElement>;
   className?: string;
-  ariaLabel?: string;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
 function Button({
@@ -16,26 +14,24 @@ function Button({
   type = "button",
   variant = "primary",
   disabled = false,
-  loading = false,
-  onClick,
   className = "",
-  ariaLabel,
+  onClick,
 }: ButtonProps) {
   return (
     <button
       type={type}
-      disabled={disabled || loading}
+      disabled={disabled}
       onClick={onClick}
-      aria-label={ariaLabel}
       className={[
-        "btn",
-        variant === "primary" ? "save-btn" : "secondary-btn",
+        variant === "primary"
+          ? "save-btn"
+          : "secondary-btn",
         className,
       ]
         .filter(Boolean)
         .join(" ")}
     >
-      {loading ? "Saving..." : children}
+      {children}
     </button>
   );
 }

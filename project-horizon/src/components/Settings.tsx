@@ -1,25 +1,42 @@
 import { useState } from "react";
-import type { ChangeEvent, FormEvent } from "react";
 import "./Settings.css";
-import InputField from "./InputField";
 import Button from "./Button";
+import InputField from "./InputField";
+
+type Theme = "Light" | "Dark" | "System";
+type Language = "English" | "Hindi" | "French";
+
+interface SettingsData {
+  fullName: string;
+  email: string;
+  theme: Theme;
+  language: Language;
+  notifications: boolean;
+}
+interface ValidationErrors {
+  fullName: string;
+  email: string;
+}
 
 function Settings() {
-  const [settings, setSettings] = useState({
+  console.log("Settings Rendered");
+  const [settings, setSettings] = useState<SettingsData>({
     fullName: "",
     email: "",
     theme: "Light",
     language: "English",
     notifications: true,
   });
-  const [errors, setErrors] = useState({
+  const [errors, setErrors] = useState<ValidationErrors>({
     fullName: "",
     email: "",
   });
 
-  const validateField = (name: string, value: string) => {
+  const validateField = (
+    name: keyof ValidationErrors,
+    value: string,
+  ): string => {
     let error = "";
-
     const scriptPattern =
       /<script|<\/script>|javascript:|onerror|onload|<img|iframe/i;
 
@@ -43,9 +60,6 @@ function Settings() {
           error = "Invalid Email Address.";
         }
         break;
-
-      default:
-        break;
     }
 
     setErrors((prev) => ({
@@ -55,77 +69,57 @@ function Settings() {
 
     return error;
   };
-
   const isFormValid =
     settings.fullName.trim().length >= 3 &&
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(settings.email) &&
     !errors.fullName &&
     !errors.email;
-
-  const sanitizeInput = (value: string) => {
-    return value.trim().replace(/\s+/g, " ");
+  const sanitizeInput = (value: string): string => {
+    return value.replace(/\s{2,}/g, " ");
   };
-
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value, type } = e.target;
-
-    const inputValue =
-      type === "checkbox" ? (e.target as HTMLInputElement).checked : value;
-
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    let inputValue = sanitizeInput(value);
+    if (name === "email") {
+      inputValue = inputValue.toLowerCase();
+    }
+    validateField(name as keyof ValidationErrors, inputValue);
     setSettings((prev) => ({
       ...prev,
       [name]: inputValue,
     }));
-
-    if (type !== "checkbox") {
-      validateField(name, value);
-    }
   };
 
-  const handleThemeChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const selectedTheme = e.target.value;
-
+  const handleThemeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSettings((prev) => ({
       ...prev,
-      theme: selectedTheme,
+      theme: e.target.value as Theme,
     }));
 
-    switch (selectedTheme) {
-      case "Light":
-        console.log("Light Theme Selected");
-        break;
-
-      case "Dark":
-        console.log("Dark Theme Selected");
-        break;
-
-      case "System":
-        console.log("System Theme Selected");
-        break;
-
-      default:
-        console.log("No Theme Selected");
-    }
+    console.log("Theme:", e.target.value);
   };
 
-  const handleLanguageChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const selectedLanguage = e.target.value;
-
+  const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSettings((prev) => ({
       ...prev,
-      language: selectedLanguage,
+      language: e.target.value as Language,
     }));
 
-    console.log("Language:", selectedLanguage);
+    console.log("Language:", e.target.value);
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleNotificationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSettings((prev) => ({
+      ...prev,
+      notifications: e.target.checked,
+    }));
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const cleanedName = sanitizeInput(settings.fullName);
-    const cleanedEmail = sanitizeInput(settings.email).toLowerCase();
+    const cleanedName = settings.fullName.trim().replace(/\s+/g, " ");
+    const cleanedEmail = settings.email.trim().toLowerCase();
 
     const fullNameError = validateField("fullName", cleanedName);
     const emailError = validateField("email", cleanedEmail);
@@ -134,13 +128,14 @@ function Settings() {
       return;
     }
 
-    const finalData = {
+    const finalData: SettingsData = {
       ...settings,
       fullName: cleanedName,
       email: cleanedEmail,
     };
 
-    console.log(finalData);
+    console.clear();
+    console.table(finalData);
 
     alert("Settings Saved Successfully!");
   };
@@ -158,19 +153,24 @@ function Settings() {
               label="Full Name"
               name="fullName"
               value={settings.fullName}
-              onChange={handleChange}
+              placeholder="Enter your full name"
               error={errors.fullName}
+              required
+              maxLength={50}
+              onChange={handleChange}
             />
 
             <InputField
               id="email"
-              label="Email"
+              label="Email Address"
               name="email"
               type="email"
-              placeholder="Enter your email"
               value={settings.email}
-              onChange={handleChange}
+              placeholder="Enter your email"
               error={errors.email}
+              required
+              maxLength={100}
+              onChange={handleChange}
             />
 
             <div className="form-group">
@@ -178,13 +178,13 @@ function Settings() {
 
               <select
                 id="theme"
-                name="theme"
                 value={settings.theme}
                 onChange={handleThemeChange}
               >
                 <option value="Light">Light</option>
                 <option value="Dark">Dark</option>
                 <option value="System">System</option>
+                <option value="Blue">Blue</option>
               </select>
             </div>
 
@@ -193,7 +193,6 @@ function Settings() {
 
               <select
                 id="language"
-                name="language"
                 value={settings.language}
                 onChange={handleLanguageChange}
               >
@@ -208,19 +207,19 @@ function Settings() {
                 <input
                   id="notifications"
                   type="checkbox"
-                  name="notifications"
                   checked={settings.notifications}
-                  onChange={handleChange}
+                  onChange={handleNotificationChange}
                   className="toggle"
                 />
                 Enable Notifications
               </label>
             </div>
+            <div className="button-container">
+              <Button  type="submit" variant="primary" disabled={!isFormValid}>
+                Save Settings
+              </Button>
+            </div>
           </div>
-
-          <Button type="submit" disabled={!isFormValid}>
-            Save Settings
-          </Button>
         </form>
       </div>
     </section>
