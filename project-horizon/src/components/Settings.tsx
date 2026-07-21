@@ -1,5 +1,8 @@
 import { useState } from "react";
+import type { ChangeEvent, FormEvent } from "react";
 import "./Settings.css";
+import InputField from "./InputField";
+import Button from "./Button";
 
 function Settings() {
   const [settings, setSettings] = useState({
@@ -13,77 +16,75 @@ function Settings() {
     fullName: "",
     email: "",
   });
- const validateField = (name: string, value: string) => {
-  let error = "";
 
-  const scriptPattern =
-    /<script|<\/script>|javascript:|onerror|onload|<img|iframe/i;
+  const validateField = (name: string, value: string) => {
+    let error = "";
 
-  if (scriptPattern.test(value)) {
-    error = "Invalid characters detected.";
-  }
+    const scriptPattern =
+      /<script|<\/script>|javascript:|onerror|onload|<img|iframe/i;
 
-  switch (name) {
-    case "fullName":
-      if (!value.trim()) {
-        error = "Full Name is required.";
-      } else if (value.trim().length < 3) {
-        error = "Minimum 3 characters required.";
-      }
-      break;
+    if (scriptPattern.test(value)) {
+      error = "Invalid characters detected.";
+    }
 
-    case "email":
-      if (!value.trim()) {
-        error = "Email is required.";
-      } else if (
-        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
-      ) {
-        error = "Invalid Email Address.";
-      }
-      break;
+    switch (name) {
+      case "fullName":
+        if (!value.trim()) {
+          error = "Full Name is required.";
+        } else if (value.trim().length < 3) {
+          error = "Minimum 3 characters required.";
+        }
+        break;
 
-    default:
-      break;
-  }
+      case "email":
+        if (!value.trim()) {
+          error = "Email is required.";
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+          error = "Invalid Email Address.";
+        }
+        break;
 
-  setErrors((prev) => ({
-    ...prev,
-    [name]: error,
-  }));
+      default:
+        break;
+    }
 
-  return error;
-};
+    setErrors((prev) => ({
+      ...prev,
+      [name]: error,
+    }));
+
+    return error;
+  };
+
   const isFormValid =
-  settings.fullName.trim().length >= 3 &&
-  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(settings.email) &&
-  !errors.fullName &&
-  !errors.email;
+    settings.fullName.trim().length >= 3 &&
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(settings.email) &&
+    !errors.fullName &&
+    !errors.email;
 
   const sanitizeInput = (value: string) => {
-  return value.trim().replace(/\s+/g, " ");
-};
+    return value.trim().replace(/\s+/g, " ");
+  };
 
- const handleChange = (
-  e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-) => {
-  const { name, value, type } = e.target;
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value, type } = e.target;
 
-  const inputValue =
-    type === "checkbox"
-      ? (e.target as HTMLInputElement).checked
-      : value;
+    const inputValue =
+      type === "checkbox" ? (e.target as HTMLInputElement).checked : value;
 
-  setSettings((prev) => ({
-    ...prev,
-    [name]: inputValue,
-  }));
+    setSettings((prev) => ({
+      ...prev,
+      [name]: inputValue,
+    }));
 
-  if (type !== "checkbox") {
-    validateField(name, value);
-  }
-};
+    if (type !== "checkbox") {
+      validateField(name, value);
+    }
+  };
 
-  const handleThemeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleThemeChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const selectedTheme = e.target.value;
 
     setSettings((prev) => ({
@@ -109,7 +110,7 @@ function Settings() {
     }
   };
 
-  const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleLanguageChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const selectedLanguage = e.target.value;
 
     setSettings((prev) => ({
@@ -120,29 +121,29 @@ function Settings() {
     console.log("Language:", selectedLanguage);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-  e.preventDefault();
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
 
-  const cleanedName = sanitizeInput(settings.fullName);
-  const cleanedEmail = sanitizeInput(settings.email).toLowerCase();
+    const cleanedName = sanitizeInput(settings.fullName);
+    const cleanedEmail = sanitizeInput(settings.email).toLowerCase();
 
-  const fullNameError = validateField("fullName", cleanedName);
-  const emailError = validateField("email", cleanedEmail);
+    const fullNameError = validateField("fullName", cleanedName);
+    const emailError = validateField("email", cleanedEmail);
 
-  if (fullNameError || emailError) {
-    return;
-  }
+    if (fullNameError || emailError) {
+      return;
+    }
 
-  const finalData = {
-    ...settings,
-    fullName: cleanedName,
-    email: cleanedEmail,
+    const finalData = {
+      ...settings,
+      fullName: cleanedName,
+      email: cleanedEmail,
+    };
+
+    console.log(finalData);
+
+    alert("Settings Saved Successfully!");
   };
-
-  console.log(finalData);
-
-  alert("Settings Saved Successfully!");
-};
 
   return (
     <section className="settings-section">
@@ -152,40 +153,25 @@ function Settings() {
 
         <form onSubmit={handleSubmit}>
           <div className="settings-grid">
-            <div className="form-group">
-              <label htmlFor="fullName">Full Name</label>
+            <InputField
+              id="fullName"
+              label="Full Name"
+              name="fullName"
+              value={settings.fullName}
+              onChange={handleChange}
+              error={errors.fullName}
+            />
 
-              <input
-                id="fullName"
-                type="text"
-                name="fullName"
-                value={settings.fullName}
-                onChange={handleChange}
-                className={errors.fullName ? "error" : ""}
-              />
-
-              {errors.fullName && (
-                <span className="error-message">{errors.fullName}</span>
-              )}
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="email">Email</label>
-
-              <input
-                id="email"
-                type="email"
-                name="email"
-                placeholder="Enter your email"
-                value={settings.email}
-                onChange={handleChange}
-                className={errors.email ? "error" : ""}
-              />
-
-              {errors.email && (
-                <span className="error-message">{errors.email}</span>
-              )}
-            </div>
+            <InputField
+              id="email"
+              label="Email"
+              name="email"
+              type="email"
+              placeholder="Enter your email"
+              value={settings.email}
+              onChange={handleChange}
+              error={errors.email}
+            />
 
             <div className="form-group">
               <label htmlFor="theme">Theme</label>
@@ -220,25 +206,21 @@ function Settings() {
             <div className="checkbox-group">
               <label htmlFor="notifications">
                 <input
-  id="notifications"
-  type="checkbox"
-  name="notifications"
-  checked={settings.notifications}
-  onChange={handleChange}
-  className="toggle"
-/>
+                  id="notifications"
+                  type="checkbox"
+                  name="notifications"
+                  checked={settings.notifications}
+                  onChange={handleChange}
+                  className="toggle"
+                />
                 Enable Notifications
               </label>
             </div>
           </div>
 
-          <button
-  type="submit"
-  className="save-btn"
-  disabled={!isFormValid}
->
-  Save Settings
-</button>
+          <Button type="submit" disabled={!isFormValid}>
+            Save Settings
+          </Button>
         </form>
       </div>
     </section>

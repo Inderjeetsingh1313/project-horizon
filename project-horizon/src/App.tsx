@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./App.css";
 import Sidebar from "./components/Sidebar";
 import Settings from "./components/Settings";
+import WorkspaceCard from "./components/WorkspaceCard";
 
 function App() {
   const [activePage, setActivePage] = useState("Dashboard");
@@ -23,30 +24,40 @@ function App() {
             </header>
 
             <section className="cards">
-              <div className="card">
-                <h3>Total Students</h3>
-                <div className="card-value">120</div>
-                <p>Registered Students</p>
-              </div>
 
-              <div className="card">
-                <h3>Courses</h3>
-                <div className="card-value">8</div>
-                <p>Available Courses</p>
-              </div>
+  <WorkspaceCard
+    title="Students"
+    footer={<small>Updated today</small>}
+  >
+    <h2>120</h2>
+    <p>Registered Students</p>
+  </WorkspaceCard>
 
-              <div className="card">
-                <h3>Assignments</h3>
-                <div className="card-value">15</div>
-                <p>Pending Assignments</p>
-              </div>
+  <WorkspaceCard
+    title="Assignments"
+    footer={<small>8 Pending</small>}
+  >
+    <h2>24</h2>
+    <p>Total Assignments</p>
+  </WorkspaceCard>
 
-              <div className="card">
-                <h3>Attendance</h3>
-                <div className="card-value">92%</div>
-                <p>Average Attendance</p>
-              </div>
-            </section>
+  <WorkspaceCard
+    title="Attendance"
+    footer={<small>Current Month</small>}
+  >
+    <h2>92%</h2>
+    <p>Average Attendance</p>
+  </WorkspaceCard>
+
+  <WorkspaceCard
+    title="Notifications"
+    footer={<small>Last Updated 5 min ago</small>}
+  >
+    <h2>5</h2>
+    <p>Unread Notifications</p>
+  </WorkspaceCard>
+
+</section>
           </>
         )}
 
