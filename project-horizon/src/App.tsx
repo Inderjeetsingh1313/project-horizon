@@ -1,75 +1,77 @@
-import { useState } from "react";
 import "./App.css";
+import { Routes, Route, Navigate } from "react-router-dom";
+
 import Sidebar from "./components/Sidebar";
 import Dashboard from "./components/Dashboard";
 import Settings from "./components/Settings";
 
-function App() {
-  const [activePage, setActivePage] = useState("Dashboard");
+function Analytics() {
+  return (
+    <>
+      <h1>Analytics</h1>
 
+      <div className="cards">
+        <div className="card">
+          <h3>Monthly Users</h3>
+          <p>1,245 Active Users</p>
+        </div>
+
+        <div className="card">
+          <h3>Revenue</h3>
+          <p>₹85,000</p>
+        </div>
+
+        <div className="card">
+          <h3>Growth</h3>
+          <p>18% Increase</p>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function Projects() {
+  return (
+    <>
+      <h1>Projects</h1>
+
+      <div className="cards">
+        <div className="card">
+          <h3>React Dashboard</h3>
+          <p>Completed</p>
+        </div>
+
+        <div className="card">
+          <h3>College ERP</h3>
+          <p>In Progress</p>
+        </div>
+
+        <div className="card">
+          <h3>Library System</h3>
+          <p>Pending Review</p>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function App() {
   return (
     <div className="app-layout">
-      <Sidebar
-        activePage={activePage}
-        setActivePage={setActivePage}
-      />
+      <Sidebar />
 
       <main className="main-content">
+        <Routes>
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
-        {activePage === "Dashboard" && (
-          <Dashboard />
-        )}
+          <Route path="/dashboard" element={<Dashboard />} />
 
-        {activePage === "Analytics" && (
-          <>
-            <h1>Analytics</h1>
+          <Route path="/analytics" element={<Analytics />} />
 
-            <div className="cards">
-              <div className="card">
-                <h3>Monthly Users</h3>
-                <p>1,245 Active Users</p>
-              </div>
+          <Route path="/projects" element={<Projects />} />
 
-              <div className="card">
-                <h3>Revenue</h3>
-                <p>₹85,000</p>
-              </div>
-
-              <div className="card">
-                <h3>Growth</h3>
-                <p>18% Increase</p>
-              </div>
-            </div>
-          </>
-        )}
-
-        {activePage === "Projects" && (
-          <>
-            <h1>Projects</h1>
-
-            <div className="cards">
-              <div className="card">
-                <h3>React Dashboard</h3>
-                <p>Completed</p>
-              </div>
-
-              <div className="card">
-                <h3>College ERP</h3>
-                <p>In Progress</p>
-              </div>
-
-              <div className="card">
-                <h3>Library System</h3>
-                <p>Pending Review</p>
-              </div>
-            </div>
-          </>
-        )}
-
-        {activePage === "Settings" && (
-          <Settings />
-        )}
-
+          <Route path="/settings" element={<Settings />} />
+        </Routes>
       </main>
     </div>
   );

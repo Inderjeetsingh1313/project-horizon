@@ -1,5 +1,4 @@
 import type { ReactNode, MouseEventHandler } from "react";
-
 export interface ButtonProps {
   children: ReactNode;
   type?: "button" | "submit" | "reset";
@@ -8,7 +7,6 @@ export interface ButtonProps {
   className?: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
 }
-
 function Button({
   children,
   type = "button",
@@ -35,5 +33,4 @@ function Button({
     </button>
   );
 }
-
 export default Button;

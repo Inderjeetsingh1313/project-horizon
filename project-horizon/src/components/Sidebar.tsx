@@ -1,21 +1,27 @@
 import "./Sidebar.css";
 import { memo } from "react";
- export interface SidebarProps {
-  activePage: string;
-  setActivePage: React.Dispatch<React.SetStateAction<string>>;
-}
+import { NavLink } from "react-router-dom";
 
 const menuItems = [
-  "Dashboard",
-  "Analytics",
-  "Projects",
-  "Settings",
+  {
+    name: "Dashboard",
+    path: "/dashboard",
+  },
+  {
+    name: "Analytics",
+    path: "/analytics",
+  },
+  {
+    name: "Projects",
+    path: "/projects",
+  },
+  {
+    name: "Settings",
+    path: "/settings",
+  },
 ];
 
-function Sidebar({
-  activePage,
-  setActivePage,
-}: SidebarProps) {
+function Sidebar() {
   return (
     <aside className="sidebar">
       <h2 className="logo">Project Horizon</h2>
@@ -23,12 +29,15 @@ function Sidebar({
       <nav>
         <ul>
           {menuItems.map((item) => (
-            <li
-              key={item}
-              className={activePage === item ? "active" : ""}
-              onClick={() => setActivePage(item)}
-            >
-              {item}
+            <li key={item.name}>
+              <NavLink
+                to={item.path}
+                className={({ isActive }) =>
+                  isActive ? "nav-link active" : "nav-link"
+                }
+              >
+                {item.name}
+              </NavLink>
             </li>
           ))}
         </ul>
@@ -36,4 +45,5 @@ function Sidebar({
     </aside>
   );
 }
+
 export default memo(Sidebar);
