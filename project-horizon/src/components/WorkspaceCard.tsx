@@ -12,11 +12,37 @@ function WorkspaceCard({
   children,
   footer,
 }: WorkspaceCardProps) {
-    console.log(title + " Rendered");
+  console.log(title + " Rendered");
+
+  const getIcon = (title: string) => {
+    switch (title) {
+      case "Students":
+        return "👨‍🎓";
+
+      case "Projects":
+        return "📁";
+
+      case "Assignments":
+        return "📝";
+
+      case "Attendance":
+        return "📊";
+
+      default:
+        return "📌";
+    }
+  };
+
   return (
     <div className="workspace-card">
       <div className="workspace-card-header">
-        <h3>{title}</h3>
+        <h3>
+          <span className="card-icon">
+            {getIcon(title)}
+          </span>
+
+          {title}
+        </h3>
       </div>
 
       <div className="workspace-card-body">
