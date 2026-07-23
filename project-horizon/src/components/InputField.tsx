@@ -11,9 +11,7 @@ export interface InputFieldProps {
   maxLength?: number;
   required?: boolean;
   disabled?: boolean;
-  onChange: (
-    e: ChangeEvent<HTMLInputElement>
-  ) => void;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 function InputField({

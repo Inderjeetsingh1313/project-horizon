@@ -1,6 +1,5 @@
 import "./App.css";
 import { Routes, Route, Navigate } from "react-router-dom";
-
 import Sidebar from "./components/Sidebar";
 import Dashboard from "./components/Dashboard";
 import Settings from "./components/Settings";
@@ -59,17 +58,12 @@ function App() {
   return (
     <div className="app-layout">
       <Sidebar />
-
       <main className="main-content">
         <Routes>
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
-
           <Route path="/dashboard" element={<Dashboard />} />
-
           <Route path="/analytics" element={<Analytics />} />
-
           <Route path="/projects" element={<Projects />} />
-
           <Route path="/settings" element={<Settings />} />
         </Routes>
       </main>
