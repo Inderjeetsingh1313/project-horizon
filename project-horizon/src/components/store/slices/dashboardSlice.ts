@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-
+import type { PayloadAction } from "@reduxjs/toolkit";
 interface DashboardState {
   students: number;
   projects: number;
@@ -18,25 +18,29 @@ const dashboardSlice = createSlice({
   name: "dashboard",
   initialState,
   reducers: {
-    setStudents(state, action) {
-      state.students = action.payload;
+    incrementStudents(state) {
+      state.students += 1;
     },
 
-    setProjects(state, action) {
-      state.projects = action.payload;
+    incrementProjects(state) {
+      state.projects += 1;
     },
 
-    setAssignments(state, action) {
-      state.assignments = action.payload;
+    incrementAssignments(state) {
+      state.assignments += 1;
     },
 
-    setAttendance(state, action) {
+    updateAttendance(state, action: PayloadAction<string>) {
       state.attendance = action.payload;
     },
   },
 });
 
-export const { setStudents, setProjects, setAssignments, setAttendance } =
-  dashboardSlice.actions;
+export const {
+  incrementStudents,
+  incrementProjects,
+  incrementAssignments,
+  updateAttendance,
+} = dashboardSlice.actions;
 
 export default dashboardSlice.reducer;

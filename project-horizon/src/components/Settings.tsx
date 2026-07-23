@@ -3,10 +3,9 @@ import "./Settings.css";
 import Button from "./Button";
 import InputField from "./InputField";
 import { useAppDispatch, useAppSelector } from "./store/hooks";
-import { updateField } from "./store/slices/settingsSlice";
+import { updateField, resetSettings } from "./store/slices/settingsSlice";
 
-type Theme = "Light" | "Dark" | "System";
-type Language = "English" | "Hindi" | "French";
+import type { Theme, Language } from "./store/slices/settingsSlice";
 
 interface ValidationErrors {
   fullName: string;
@@ -91,22 +90,30 @@ function Settings() {
   };
 
   const handleThemeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-  dispatch(
-    updateField({
-      name: "theme",
-      value: e.target.value as Theme,
-    }),
-  );
-};
+    const value = e.target.value;
+
+    if (value === "Light" || value === "Dark" || value === "System") {
+      dispatch(
+        updateField({
+          name: "theme",
+          value,
+        }),
+      );
+    }
+  };
 
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-  dispatch(
-    updateField({
-      name: "language",
-      value: e.target.value as Language,
-    }),
-  );
-};
+    const value = e.target.value;
+
+    if (value === "English" || value === "Hindi" || value === "French") {
+      dispatch(
+        updateField({
+          name: "language",
+          value,
+        }),
+      );
+    }
+  };
 
   const handleNotificationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(
@@ -236,6 +243,13 @@ function Settings() {
               <Button type="submit" variant="primary" disabled={!isFormValid}>
                 💾 Save Changes
               </Button>
+              <button
+    type="button"
+    className="reset-btn"
+    onClick={() => dispatch(resetSettings())}
+  >
+    Reset
+  </button>
             </div>
           </div>
         </form>

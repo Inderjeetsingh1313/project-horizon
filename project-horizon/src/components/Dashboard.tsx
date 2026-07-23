@@ -1,7 +1,8 @@
 import { memo } from "react";
 import { useSearchParams } from "react-router-dom";
 import WorkspaceCard from "./WorkspaceCard";
-import { useAppSelector } from "./store/hooks";
+import { useAppDispatch, useAppSelector } from "./store/hooks";
+import { incrementStudents,incrementProjects,incrementAssignments,updateAttendance,} from "./store/slices/dashboardSlice";
 import "./Dashboard.css";
 
 interface DashboardCard {
@@ -11,6 +12,8 @@ interface DashboardCard {
 }
 
 function Dashboard() {
+  const dispatch = useAppDispatch();
+  const settings = useAppSelector((state) => state.settings);
   const dashboardState = useAppSelector((state) => state.dashboard);
   const dashboardCards: DashboardCard[] = [
     {
@@ -75,7 +78,11 @@ function Dashboard() {
       <header className="page-header">
         <h1>Dashboard</h1>
 
-        <p>Welcome to Dashboard</p>
+         <div className="user-info">
+  <h3>
+    Welcome, {settings.fullName || "Guest"} 👋
+  </h3>
+</div>
 
         <div className="search-box">
           <input
@@ -93,6 +100,38 @@ function Dashboard() {
             <WorkspaceCard key={card.title} title={card.title}>
               <h2>{card.value}</h2>
               <p>{card.description}</p>
+              {card.title === "Students" && (
+                <button
+                  className="card-action"
+                  onClick={() => dispatch(incrementStudents())}
+                >
+                  + Add Student
+                </button>
+              )}
+              {card.title === "Projects" && (
+                <button
+                  className="card-action"
+                  onClick={() => dispatch(incrementProjects())}
+                >
+                  + Add Project
+                </button>
+              )}
+              {card.title === "Assignments" && (
+                <button
+                  className="card-action"
+                  onClick={() => dispatch(incrementAssignments())}
+                >
+                  + Add Assignment
+                </button>
+              )}
+              {card.title === "Attendance" && (
+                <button
+                  className="card-action"
+                  onClick={() => dispatch(updateAttendance("93%"))}
+                >
+                  Update Attendance
+                </button>
+              )}
             </WorkspaceCard>
           ))
         ) : (
