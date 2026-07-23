@@ -7,13 +7,7 @@ export interface WorkspaceCardProps {
   footer?: ReactNode;
 }
 
-function WorkspaceCard({
-  title,
-  children,
-  footer,
-}: WorkspaceCardProps) {
-  console.log(title + " Rendered");
-
+function WorkspaceCard({ title, children, footer }: WorkspaceCardProps) {
   const getIcon = (title: string) => {
     switch (title) {
       case "Students":
@@ -37,23 +31,14 @@ function WorkspaceCard({
     <div className="workspace-card">
       <div className="workspace-card-header">
         <h3>
-          <span className="card-icon">
-            {getIcon(title)}
-          </span>
-
+          <span className="card-icon">{getIcon(title)}</span>
           {title}
         </h3>
       </div>
 
-      <div className="workspace-card-body">
-        {children}
-      </div>
+      <div className="workspace-card-body">{children}</div>
 
-      {footer && (
-        <div className="workspace-card-footer">
-          {footer}
-        </div>
-      )}
+      {footer && <div className="workspace-card-footer">{footer}</div>}
     </div>
   );
 }

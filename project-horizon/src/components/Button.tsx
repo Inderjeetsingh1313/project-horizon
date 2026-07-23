@@ -21,9 +21,7 @@ function Button({
       disabled={disabled}
       onClick={onClick}
       className={[
-        variant === "primary"
-          ? "save-btn"
-          : "secondary-btn",
+        variant === "primary" ? "save-btn" : "secondary-btn",
         className,
       ]
         .filter(Boolean)

@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { useSearchParams } from "react-router-dom";
 import WorkspaceCard from "./WorkspaceCard";
+import { useAppSelector } from "./store/hooks";
 import "./Dashboard.css";
 
 interface DashboardCard {
@@ -9,38 +10,33 @@ interface DashboardCard {
   description: string;
 }
 
-const dashboardCards: DashboardCard[] = [
-  {
-    title: "Students",
-    value: "120",
-    description: "Registered Students",
-  },
-  {
-    title: "Projects",
-    value: "8",
-    description: "Running Projects",
-  },
-  {
-    title: "Assignments",
-    value: "24",
-    description: "Total Assignments",
-  },
-  {
-    title: "Attendance",
-    value: "92%",
-    description: "Monthly Attendance",
-  },
-];
-
 function Dashboard() {
-  console.log("Dashboard Rendered");
+  const dashboardState = useAppSelector((state) => state.dashboard);
+  const dashboardCards: DashboardCard[] = [
+    {
+      title: "Students",
+      value: String(dashboardState.students),
+      description: "Registered Students",
+    },
+    {
+      title: "Projects",
+      value: String(dashboardState.projects),
+      description: "Running Projects",
+    },
+    {
+      title: "Assignments",
+      value: String(dashboardState.assignments),
+      description: "Total Assignments",
+    },
+    {
+      title: "Attendance",
+      value: dashboardState.attendance,
+      description: "Monthly Attendance",
+    },
+  ];
 
   const [searchParams, setSearchParams] = useSearchParams();
-
-  // Read query parameter on application load
   const rawSearch = searchParams.get("search") || "";
-
-  // Validate URL parameter
   const validateSearch = (value: string): string => {
     const cleaned = value.trim();
 
@@ -58,27 +54,20 @@ function Dashboard() {
     return cleaned;
   };
 
-  // Initialize component using validated URL parameter
   const search = validateSearch(rawSearch);
 
-  // Update URL while typing
-  const handleSearch = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
 
     if (value.trim() === "") {
-      setSearchParams({});
+      setSearchParams({}, { replace: true });
     } else {
-      setSearchParams({
-        search: value,
-      });
+      setSearchParams({ search: value }, { replace: true });
     }
   };
 
-  // Filter dashboard cards
   const filteredCards = dashboardCards.filter((card) =>
-    card.title.toLowerCase().includes(search.toLowerCase())
+    card.title.toLowerCase().includes(search.toLowerCase()),
   );
 
   return (
@@ -101,10 +90,7 @@ function Dashboard() {
       <section className="cards">
         {filteredCards.length > 0 ? (
           filteredCards.map((card) => (
-            <WorkspaceCard
-              key={card.title}
-              title={card.title}
-            >
+            <WorkspaceCard key={card.title} title={card.title}>
               <h2>{card.value}</h2>
               <p>{card.description}</p>
             </WorkspaceCard>
