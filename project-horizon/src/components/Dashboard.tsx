@@ -4,6 +4,8 @@ import WorkspaceCard from "./WorkspaceCard";
 import { useAppDispatch, useAppSelector } from "./store/hooks";
 import { incrementStudents,incrementProjects,incrementAssignments,updateAttendance,} from "./store/slices/dashboardSlice";
 import "./Dashboard.css";
+import { useEffect } from "react";
+import api from "../api/axios";
 
 interface DashboardCard {
   title: string;
@@ -12,6 +14,18 @@ interface DashboardCard {
 }
 
 function Dashboard() {
+  useEffect(() => {
+  const fetchUsers = async () => {
+    try {
+      const response = await api.get("/users");
+      console.log("Axios Response:");
+      console.table(response.data);
+    } catch (error) {
+      console.error("API Error:", error);
+    }
+  };
+  fetchUsers();
+}, []);
   const dispatch = useAppDispatch();
   const settings = useAppSelector((state) => state.settings);
   const dashboardState = useAppSelector((state) => state.dashboard);
