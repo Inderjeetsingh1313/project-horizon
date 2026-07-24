@@ -32,7 +32,7 @@ function Dashboard() {
     setLoading(true);
     setError("");
 
-    const response = await api.get("/uszers");
+    const response = await api.get("/users");
 
     console.log(response.data);
   } catch (err) {
