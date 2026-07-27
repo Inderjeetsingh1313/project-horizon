@@ -3,7 +3,23 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import Dashboard from "./components/Dashboard";
 import Settings from "./components/Settings";
+import Login from "./components/Login";
+import AccessDenied from "./components/AccessDenied";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { setNavigator } from "./components/utils/navigation";
+import ToastBanner from "./components/ToastBanner";
 
+
+function NavigationHandler() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setNavigator(navigate);
+  }, [navigate]);
+
+  return null;
+}
 function Analytics() {
   return (
     <>
@@ -59,13 +75,27 @@ function App() {
     <div className="app-layout">
       <Sidebar />
       <main className="main-content">
+        <NavigationHandler />
+        <ToastBanner />
         <Routes>
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/analytics" element={<Analytics />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/settings" element={<Settings />} />
-        </Routes>
+  <Route path="/" element={<Navigate to="/dashboard" replace />} />
+
+  <Route path="/dashboard" element={<Dashboard />} />
+
+  <Route path="/analytics" element={<Analytics />} />
+
+  <Route path="/projects" element={<Projects />} />
+
+  <Route path="/settings" element={<Settings />} />
+
+  {/* New routes */}
+  <Route path="/login" element={<Login />} />
+
+  <Route
+    path="/access-denied"
+    element={<AccessDenied />}
+  />
+</Routes>
       </main>
     </div>
   );

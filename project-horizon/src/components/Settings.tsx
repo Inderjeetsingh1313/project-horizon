@@ -4,8 +4,8 @@ import Button from "./Button";
 import InputField from "./InputField";
 import { useAppDispatch, useAppSelector } from "./store/hooks";
 import { updateField, resetSettings } from "./store/slices/settingsSlice";
-
-import type { Theme, Language } from "./store/slices/settingsSlice";
+import api from "../api/axios";
+import { addNotification } from "./store/slices/notificationSlice";
 
 interface ValidationErrors {
   fullName: string;
@@ -124,7 +124,7 @@ function Settings() {
     );
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async ( e: React.FormEvent<HTMLFormElement>,) => {
     e.preventDefault();
 
     const cleanedName = settings.fullName.trim().replace(/\s+/g, " ");
@@ -135,9 +135,18 @@ function Settings() {
 
     const emailError = validateField("email", cleanedEmail);
 
-    if (fullNameError || emailError) {
-      return;
-    }
+  if (fullNameError || emailError) {
+    return;
+  }
+
+  try {
+    await api.post("/settings", {
+      fullName: cleanedName,
+      email: cleanedEmail,
+      theme: settings.theme,
+      language: settings.language,
+      notifications: settings.notifications,
+    });
 
     dispatch(
       updateField({
@@ -147,13 +156,20 @@ function Settings() {
     );
 
     dispatch(
-      updateField({
-        name: "email",
-        value: cleanedEmail,
+      addNotification({
+        type: "success",
+        message: "Settings saved successfully!",
       }),
     );
-    alert("✅ Settings saved successfully!");
-  };
+  } catch (error: any) {
+    if (error.response?.status === 400) {
+      setErrors({
+        fullName: error.response.data.errors.fullName || "",
+        email: error.response.data.errors.email || "",
+      });
+    }
+  }
+};
 
   return (
     <section className="settings-section">

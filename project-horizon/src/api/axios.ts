@@ -1,4 +1,7 @@
 import axios from "axios";
+import { navigateTo } from "../components/utils/navigation";
+import { store } from "../components/store/store";
+import { addNotification } from "../components/store/slices/notificationSlice";
 
 const api = axios.create({
   baseURL: "https://jsonplaceholder.typicode.com",
@@ -7,6 +10,18 @@ const api = axios.create({
     "Content-Type": "application/json",
   },
 });
+
+const broadcast = (type: "error" | "warning" | "info", message: string) => {
+  const alreadyShown = store
+    .getState()
+    .notifications.items.some((n) => n.message === message);
+
+  if (alreadyShown) return;
+
+  store.dispatch(addNotification({ type, message }));
+};
+
+
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
@@ -32,28 +47,30 @@ api.interceptors.response.use(
     if (error.response) {
       switch (error.response.status) {
         case 401:
-          alert("Unauthorized! Please login again.");
+          broadcast("error", "Your session has expired. Please log in again.");
+          navigateTo("/login");
           break;
 
         case 403:
-          alert("Access Denied.");
+          broadcast("error", "You don't have permission to do that.");
+          navigateTo("/access-denied");
           break;
 
         case 404:
-          alert("Resource Not Found.");
+          broadcast("warning", "Resource not found.");
           break;
 
         case 500:
-          alert("Internal Server Error.");
+          broadcast("error", "Internal server error. Please try again.");
           break;
 
         default:
-          alert("Something went wrong.");
+          broadcast("error", "Something went wrong.");
       }
     } else if (error.request) {
-      alert("Network Error. Please check your internet connection.");
+      broadcast("error", "Network error. Please check your connection.");
     } else {
-      alert("Unexpected Error.");
+      broadcast("error", "Unexpected error.");
     }
 
     return Promise.reject(error);
