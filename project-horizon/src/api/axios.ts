@@ -2,6 +2,7 @@ import axios from "axios";
 import { navigateTo } from "../components/utils/navigation";
 import { store } from "../components/store/store";
 import { addNotification } from "../components/store/slices/notificationSlice";
+import { maybeInjectFailure } from "../components/utils/chaosMonkey";
 
 const api = axios.create({
   baseURL: "https://jsonplaceholder.typicode.com",
@@ -31,6 +32,10 @@ api.interceptors.request.use(
     }
 
     console.log("Request:", config.url);
+    const simulatedError = maybeInjectFailure(config.url ?? "");
+    if (simulatedError) {
+      return Promise.reject(simulatedError);
+    }
 
     return config;
   },

@@ -10,6 +10,7 @@ import {
 } from "./store/slices/dashboardSlice";
 import "./Dashboard.css";
 import api from "../api/axios";
+import useDebounce from "./hooks/useDebounce";
 
 interface DashboardCard {
   title: string;
@@ -91,6 +92,10 @@ function Dashboard() {
   };
 
   const search = validateSearch(rawSearch);
+  const debouncedSearch = useDebounce(search, 500);
+//   useEffect(() => {
+//   console.log("Debounced Search:", debouncedSearch);
+// }, [debouncedSearch]);
 
   const handleSearch = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -108,10 +113,10 @@ function Dashboard() {
   };
 
   const filteredCards = dashboardCards.filter((card) =>
-    card.title
-      .toLowerCase()
-      .includes(search.toLowerCase()),
-  );
+  card.title
+    .toLowerCase()
+    .includes(debouncedSearch.toLowerCase()),
+);
 
   if (loading) {
     return (

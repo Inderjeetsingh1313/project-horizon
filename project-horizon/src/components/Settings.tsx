@@ -20,6 +20,7 @@ function Settings() {
     fullName: "",
     email: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const validateField = (
     name: keyof ValidationErrors,
@@ -124,52 +125,59 @@ function Settings() {
     );
   };
 
-  const handleSubmit = async ( e: React.FormEvent<HTMLFormElement>,) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const cleanedName = settings.fullName.trim().replace(/\s+/g, " ");
+    if (isSubmitting) {
+      return;
+    }
 
+    const cleanedName = settings.fullName.trim().replace(/\s+/g, " ");
     const cleanedEmail = settings.email.trim().toLowerCase();
 
     const fullNameError = validateField("fullName", cleanedName);
-
     const emailError = validateField("email", cleanedEmail);
 
-  if (fullNameError || emailError) {
-    return;
-  }
-
-  try {
-    await api.post("/settings", {
-      fullName: cleanedName,
-      email: cleanedEmail,
-      theme: settings.theme,
-      language: settings.language,
-      notifications: settings.notifications,
-    });
-
-    dispatch(
-      updateField({
-        name: "fullName",
-        value: cleanedName,
-      }),
-    );
-
-    dispatch(
-      addNotification({
-        type: "success",
-        message: "Settings saved successfully!",
-      }),
-    );
-  } catch (error: any) {
-    if (error.response?.status === 400) {
-      setErrors({
-        fullName: error.response.data.errors.fullName || "",
-        email: error.response.data.errors.email || "",
-      });
+    if (fullNameError || emailError) {
+      return;
     }
-  }
-};
+
+    try {
+      setIsSubmitting(true);
+
+      await api.post("/settings", {
+        fullName: cleanedName,
+        email: cleanedEmail,
+        theme: settings.theme,
+        language: settings.language,
+        notifications: settings.notifications,
+      });
+
+      dispatch(
+        updateField({
+          name: "fullName",
+          value: cleanedName,
+        }),
+      );
+
+      dispatch(
+        addNotification({
+          type: "success",
+          message: "Settings saved successfully!",
+          duration: 5000,
+        }),
+      );
+    } catch (error: any) {
+      if (error.response?.status === 400) {
+        setErrors({
+          fullName: error.response.data.errors.fullName || "",
+          email: error.response.data.errors.email || "",
+        });
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <section className="settings-section">
@@ -256,16 +264,20 @@ function Settings() {
             </div>
 
             <div className="button-container">
-              <Button type="submit" variant="primary" disabled={!isFormValid}>
-                💾 Save Changes
+              <Button
+                type="submit"
+                variant="primary"
+                disabled={!isFormValid || isSubmitting}
+              >
+                {isSubmitting ? "Saving..." : "💾 Save Changes"}
               </Button>
               <button
-    type="button"
-    className="reset-btn"
-    onClick={() => dispatch(resetSettings())}
-  >
-    Reset
-  </button>
+                type="button"
+                className="reset-btn"
+                onClick={() => dispatch(resetSettings())}
+              >
+                Reset
+              </button>
             </div>
           </div>
         </form>

@@ -9,7 +9,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { setNavigator } from "./components/utils/navigation";
 import ToastBanner from "./components/ToastBanner";
-
+import ChaosPanel from "./components/ChaosPanel";
 
 function NavigationHandler() {
   const navigate = useNavigate();
@@ -76,6 +76,7 @@ function App() {
       <Sidebar />
       <main className="main-content">
         <NavigationHandler />
+        {import.meta.env.DEV && <ChaosPanel />}
         <ToastBanner />
         <Routes>
   <Route path="/" element={<Navigate to="/dashboard" replace />} />
