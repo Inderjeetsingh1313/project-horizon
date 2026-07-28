@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from "./store/hooks";
 import { updateField, resetSettings } from "./store/slices/settingsSlice";
 import api from "../api/axios";
 import { addNotification } from "./store/slices/notificationSlice";
+import axios from "axios";
 
 interface ValidationErrors {
   fullName: string;
@@ -167,14 +168,23 @@ function Settings() {
           duration: 5000,
         }),
       );
-    } catch (error: any) {
-      if (error.response?.status === 400) {
-        setErrors({
-          fullName: error.response.data.errors.fullName || "",
-          email: error.response.data.errors.email || "",
-        });
-      }
-    } finally {
+    } catch (error: unknown) {
+  if (
+    axios.isAxiosError<{
+      errors: {
+        fullName: string;
+        email: string;
+      };
+    }>(error)
+  ) {
+    if (error.response?.status === 400) {
+      setErrors({
+        fullName: error.response.data.errors.fullName || "",
+        email: error.response.data.errors.email || "",
+      });
+    }
+  }
+} finally {
       setIsSubmitting(false);
     }
   };
